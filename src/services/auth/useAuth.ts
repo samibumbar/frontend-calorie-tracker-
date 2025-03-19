@@ -9,18 +9,16 @@ export function useAuth() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const storedName = localStorage.getItem("userName");
 
     if (!token) {
-      router.push("/login");
       return;
     }
 
-    const storedName = localStorage.getItem("userName");
-
-    if (storedName) {
+    if (storedName && !user) {
       setUser({ name: storedName });
     }
-  }, [router]);
+  }, [user]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -36,8 +34,9 @@ export function useAuth() {
 
       const data = await response.json();
       localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("userName", data.user.name);
       setUser({ name: data.user.name });
-      router.push("/dashboard");
+      router.push("/private");
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -45,6 +44,7 @@ export function useAuth() {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
     setUser(null);
     router.push("/login");
   };

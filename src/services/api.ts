@@ -10,7 +10,15 @@ interface SaveCaloriesResponse {
   dailyKcal: number;
   notRecommended: { title: string }[];
 }
-
+interface SummaryResponse {
+  dailyKcal: number;
+  totalCaloriesConsumed: number;
+  consumedProducts: {
+    product: { title: string; calories: number };
+    quantity: number;
+  }[];
+  notRecommended: { title: string }[];
+}
 export const saveDailyCalories = async (
   data: SaveCaloriesRequest,
   token: string
@@ -28,5 +36,22 @@ export const saveDailyCalories = async (
   );
 
   if (!response.ok) throw new Error("Failed to save daily calories");
+  return response.json();
+};
+
+export const getSummary = async (
+  date: string,
+  token: string
+): Promise<SummaryResponse> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/days/${date}/summary`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) throw new Error("Failed to fetch summary data");
   return response.json();
 };

@@ -1,11 +1,12 @@
 "use client";
 
+import { memo } from "react";
 import { PrivateLayout } from "@/components/layouts";
 
-export default function PrivatePage({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <PrivateLayout>{children}</PrivateLayout>;
-}
+const PrivatePage = memo(() => {
+  return <PrivateLayout />;
+});
+
+PrivatePage.displayName = "PrivatePage";
+
+export default PrivatePage;

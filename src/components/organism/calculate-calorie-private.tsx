@@ -11,18 +11,17 @@ export function CalorieIntakeFormPrivate({
 }: {
   onUpdateNotRecommended: (foods: { title: string }[]) => void;
 }) {
-  const [height, setHeight] = useState<string>("");
-  const [currentWeight, setCurrentWeight] = useState<string>("");
-  const [desiredWeight, setDesiredWeight] = useState<string>("");
-  const [age, setAge] = useState<string>("");
-  const [bloodType, setBloodType] = useState<string>("1");
+  const [height, setHeight] = useState("");
+  const [currentWeight, setCurrentWeight] = useState("");
+  const [desiredWeight, setDesiredWeight] = useState("");
+  const [age, setAge] = useState("");
+  const [bloodType, setBloodType] = useState("1");
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [dailyKcal, setDailyKcal] = useState<number | null>(null);
   const [notRecommended, setNotRecommended] = useState<{ title: string }[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Memorizează requestData pentru a evita re-crearea sa la fiecare render
   const requestData = useMemo(
     () => ({
       height: Number(height),
@@ -45,59 +44,21 @@ export function CalorieIntakeFormPrivate({
       setNotRecommended(data.notRecommended);
       setIsModalOpen(true);
 
-      // 🔥 Update UI-ul din PrivateLayout
+      localStorage.setItem(
+        "notRecommendedFoods",
+        JSON.stringify(data.notRecommended || [])
+      );
+
       onUpdateNotRecommended(data.notRecommended);
 
-      // ✅ Notificare de succes
       toast.success("Daily calorie intake saved successfully!");
     } catch (error) {
-      console.error("❌ Error:", error);
+      console.error("Error:", error);
       toast.error("Failed to save daily calories!");
     } finally {
       setLoading(false);
     }
   };
-
-  // ✅ Memorizează datele afișate în modal pentru a evita recalcularea la fiecare render
-  const modalContent = useMemo(
-    () => (
-      <div className="text-center flex flex-col gap-4 items-center">
-        <h2 className="font-bold text-lg">Your recommended daily intake</h2>
-        <p className="text-4xl font-bold mt-2">
-          {dailyKcal} <span className="text-sm">kcal</span>
-        </p>
-
-        <div className="border-b w-52 mx-auto my-4"></div>
-
-        <h3 className="text-md font-semibold text-left">
-          Foods you should not eat
-        </h3>
-        {notRecommended.length > 0 ? (
-          <ol className="text-gray-500 text-sm mt-2 flex flex-col items-start">
-            {notRecommended.map((food, index) => (
-              <li key={index}>{food.title}</li>
-            ))}
-          </ol>
-        ) : (
-          <p className="text-gray-500 text-sm mt-2">
-            Your diet restrictions will be displayed here.
-          </p>
-        )}
-
-        <div className="mt-6 mb-4">
-          <Button
-            color="primary"
-            variant="filled"
-            size="md"
-            onClick={() => setIsModalOpen(false)}
-          >
-            Start losing weight
-          </Button>
-        </div>
-      </div>
-    ),
-    [dailyKcal, notRecommended] // Se re-randează doar dacă se schimbă datele
-  );
 
   return (
     <div className="w-full max-w-md p-6 flex flex-col gap-10 pt-20">
@@ -105,7 +66,7 @@ export function CalorieIntakeFormPrivate({
         Calculate your daily calorie intake right now
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex gap-6">
+        <div className="flex gap-6 flex-col md:flex-row">
           <div className="flex flex-col gap-5">
             <Input
               placeholder="Height *"
@@ -154,7 +115,40 @@ export function CalorieIntakeFormPrivate({
       </form>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        {modalContent}
+        <div className="text-center flex flex-col gap-4 items-center">
+          <h2 className="font-bold text-lg">Your recommended daily intake</h2>
+          <p className="text-4xl font-bold mt-2">
+            {dailyKcal} <span className="text-sm">kcal</span>
+          </p>
+
+          <div className="border-b w-52 mx-auto my-4"></div>
+
+          <h3 className="text-md font-semibold text-left">
+            Foods you should not eat
+          </h3>
+          {notRecommended.length > 0 ? (
+            <ol className="text-gray-500 text-sm mt-2 flex flex-col items-start">
+              {notRecommended.map((food, index) => (
+                <li key={index}>{food.title}</li>
+              ))}
+            </ol>
+          ) : (
+            <p className="text-gray-500 text-sm mt-2">
+              Your diet restrictions will be displayed here.
+            </p>
+          )}
+
+          <div className="mt-6 mb-4">
+            <Button
+              color="primary"
+              variant="filled"
+              size="md"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Start losing weight
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

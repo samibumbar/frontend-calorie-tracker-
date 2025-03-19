@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, RadioGroup } from "../atoms";
 import { Modal } from "./modal";
-import { getPublicCalories } from "@/utils/api";
+import { getPublicCalories } from "@/utils";
+import { toast } from "react-toastify";
 
-export function CalorieIntakeFormPublic() {
+export const CalorieIntakeFormPublic = memo(function CalorieIntakeFormPublic() {
   const [height, setHeight] = useState("");
   const [currentWeight, setCurrentWeight] = useState("");
   const [desiredWeight, setDesiredWeight] = useState("");
@@ -37,11 +38,18 @@ export function CalorieIntakeFormPublic() {
       setDailyKcal(publicData.dailyKcal);
       setNotRecommended(publicData.notRecommended);
       setIsModalOpen(true);
+      toast.success("Calculation successful! 🎉");
     } catch (error) {
       console.error("❌ Failed to fetch calorie data:", error);
+      toast.error("Failed to calculate. Please try again! ❌");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRedirectToLogin = () => {
+    toast.info("To continue, you need to register first! ⚠️");
+    router.push("/login");
   };
 
   return (
@@ -50,7 +58,7 @@ export function CalorieIntakeFormPublic() {
         Calculate your daily calorie intake right now
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex gap-6">
+        <div className="flex gap-6 flex-col sm:flex-row">
           <div className="flex flex-col gap-5">
             <Input
               placeholder="Height *"
@@ -91,18 +99,17 @@ export function CalorieIntakeFormPublic() {
               selectedValue={bloodType}
               onChange={setBloodType}
             />
-            {/* <Button type="submit" disabled={loading}>
-              {loading ? "Calculating..." : "Calculate"}
-            </Button> */}
-            <Button
-              type="submit"
-              color="primary"
-              variant="filled"
-              size="md"
-              disabled={loading}
-            >
-              Start losing weight
-            </Button>
+            <div className="flex justify-end mt-6">
+              <Button
+                type="submit"
+                color="primary"
+                variant="filled"
+                size="md"
+                disabled={loading}
+              >
+                {loading ? "Calculating..." : "Start losing weight"}
+              </Button>
+            </div>
           </div>
         </div>
       </form>
@@ -136,7 +143,7 @@ export function CalorieIntakeFormPublic() {
               color="primary"
               variant="filled"
               size="md"
-              onClick={() => router.push("/login")}
+              onClick={handleRedirectToLogin}
             >
               Start losing weight
             </Button>
@@ -145,4 +152,4 @@ export function CalorieIntakeFormPublic() {
       </Modal>
     </div>
   );
-}
+});

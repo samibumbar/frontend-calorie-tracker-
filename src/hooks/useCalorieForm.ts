@@ -35,7 +35,6 @@ export function useCalorieForm(submitFn: SubmitFn) {
   const [notRecommended, setNotRecommended] = useState<{ title: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // ✅ Convertim datele la `number`
   const requestData = useMemo(
     () => ({
       height: parseFloat(formData.height) || 0,

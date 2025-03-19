@@ -28,11 +28,11 @@ export async function getPublicCalories({
     }
 
     const data = await response.json();
-    console.log("📥 Received response:", data);
+    console.log(" Received response:", data);
 
     return data;
   } catch (error) {
-    console.error("❌ Failed to fetch calorie data:", error);
+    console.error(" Failed to fetch calorie data:", error);
     throw error;
   }
 }
