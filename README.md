@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 Frontend Calories Tracker
 
-## Getting Started
+Welcome to **Frontend Calories Tracker**, a modern and user-friendly web app built with **React**, **Next.js**, **TypeScript**, and **TailwindCSS**. This frontend interacts with the Backend Calories API, allowing users to track their caloric intake, manage meals, and authenticate securely.
 
-First, run the development server:
+## 🚀 Technologies Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js (App Router)** - Server-side rendering & static site generation.
+- **TypeScript** - Type-safe JavaScript.
+- **Redux Toolkit** - Global state management.
+- **React Query** - Data fetching & caching.
+- **TailwindCSS** - Utility-first CSS framework.
+- **React Toastify** - User notifications.
+- **Axios** - API requests.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Setup & Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/your-username/frontend-calories-tracker.git
+   ```
+2. **Navigate to the directory:**
+   ```sh
+   cd frontend-calories-tracker
+   ```
+3. **Install dependencies with Bun:**
+   ```sh
+   bun install
+   ```
+4. **Set environment variables:** Create a `.env.local` file and add:
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:3000/api
+   ```
+5. **Start the development server:**
+   ```sh
+   bun run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📌 Features
 
-## Learn More
+### 🔑 Authentication
 
-To learn more about Next.js, take a look at the following resources:
+- **Login** (`/login`) - User login via email & password.
+- **Signup** (`/signup`) - New user registration.
+- **Protected Routes** - Only accessible when logged in.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 📆 Dashboard (Authenticated Users)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Diary Page** (`/diary`) - Manage daily food intake.
+- **Right Sidebar** - Displays calorie goals & progress.
+- **Food Search** - Search and log products.
 
-## Deploy on Vercel
+## 📡 API Integration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🔑 Authentication
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `POST /api/auth/register` - Register user.
+- `POST /api/auth/login` - User login.
+- `POST /api/auth/logout` - Logout.
+- `POST /api/auth/refresh` - Refresh token.
+
+### 🔥 Caloric Intake
+
+- `GET /api/calories/public` - Public calorie recommendations.
+- `GET /api/calories/private` - User-specific calorie data.
+
+### 🥗 Products
+
+- `GET /api/products/search?query=<search_term>` - Search products.
+
+### 📆 Daily Consumption
+
+- `POST /api/days/add` - Add consumed product.
+- `DELETE /api/days/remove` - Remove consumed product.
+- `GET /api/days/:date` - Get daily food intake.
+
+## 🔐 Security
+
+- **JWT Authentication** - API requests require `Authorization: Bearer <token>`.
+- **Secure Storage** - Tokens stored in `localStorage`.
+
+---
+
+_Developed with ❤️ using Bun, Next.js, TypeScript, and TailwindCSS._
